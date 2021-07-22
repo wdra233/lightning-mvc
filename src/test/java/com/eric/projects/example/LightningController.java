@@ -11,7 +11,7 @@ public class LightningController {
     @Autowired
     private LightningService service;
 
-    public String hello() {
-        return service.helloWord();
+    public void hello() {
+        System.out.println("-----------" + service.helloWord() + "------------------");
     }
 }

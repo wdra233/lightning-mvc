@@ -1,5 +1,6 @@
 package com.eric.projects.core;
 
+import com.eric.projects.aop.annotation.Aspect;
 import com.eric.projects.core.annotation.Component;
 import com.eric.projects.core.annotation.Controller;
 import com.eric.projects.core.annotation.Repository;
@@ -24,7 +25,7 @@ public class BeanContainer {
     private volatile boolean isLoadBean = false;
 
     private static final List<Class<? extends Annotation>> BEAN_ANNOTATION =
-            Arrays.asList(Component.class, Controller.class, Repository.class, Service.class);
+            Arrays.asList(Component.class, Controller.class, Repository.class, Service.class, Aspect.class);
 
     private final Map<Class<?>, Object> beanMap = new ConcurrentHashMap<>();
 
