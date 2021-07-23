@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Method;
 
 @Slf4j
-@Aspect(target = Controller.class)
+@Aspect(pointcut = "execution(* com.eric.projects.example.LightningController.helloForAspect(..))")
 public class LightningAspect implements AroundAdvice {
     @Override
     public void before(Class<?> clazz, Method method, Object[] args) throws Throwable {

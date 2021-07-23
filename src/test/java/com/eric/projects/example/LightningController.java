@@ -14,4 +14,8 @@ public class LightningController {
     public void hello() {
         System.out.println("-----------" + service.helloWord() + "------------------");
     }
+
+    public void helloForAspect() {
+        System.out.println("-----------helloForAspect----------------");
+    }
 }

@@ -17,18 +17,25 @@ public class Aop {
         beanContainer.getClassesBySuper(Advice.class)
                 .stream()
                 .filter(clazz -> clazz.isAnnotationPresent(Aspect.class))
-                .forEach(clazz -> {
-                    final Advice advice = (Advice) beanContainer.getBean(clazz);
-                    final Aspect aspect = clazz.getAnnotation(Aspect.class);
-                    beanContainer.getClassesByAnnotation(aspect.target())
-                            .stream()
-                            .filter(target -> !Advice.class.isAssignableFrom(target))
-                            .filter(target -> !target.isAnnotationPresent(Aspect.class))
-                            .forEach(target -> {
-                                ProxyAdvisor proxyAdvisor = new ProxyAdvisor(advice);
+                .map(this::createProxyAdvisor)
+                .forEach(proxyAdvisor -> beanContainer.getClasses()
+                        .stream()
+                        .filter(target -> !Advice.class.isAssignableFrom(target))
+                        .filter(target -> !target.isAnnotationPresent(Aspect.class))
+                        .forEach(target -> {
+                            if(proxyAdvisor.getPointcut().matches(target)) {
                                 Object proxyBean = ProxyCreator.createProxy(target, proxyAdvisor);
                                 beanContainer.addBean(target, proxyBean);
-                            });
-                });
+                            }
+                        })
+                );
+    }
+
+    private ProxyAdvisor createProxyAdvisor(Class<?> aspectClass) {
+        final String expression  = aspectClass.getAnnotation(Aspect.class).pointcut();
+        ProxyPointcut proxyPointcut = new ProxyPointcut();
+        proxyPointcut.setExpression(expression);
+        Advice advice = (Advice) beanContainer.getBean(aspectClass);
+        return new ProxyAdvisor(advice, proxyPointcut);
     }
 }

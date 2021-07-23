@@ -20,8 +20,14 @@ public class ProxyAdvisor {
 
     private Advice advice;
 
+    private ProxyPointcut pointcut;
+
     public Object doProxy(Object target, Class<?> targetClass, Method method, Object[] args, MethodProxy methodProxy)
             throws Throwable {
+
+        if (!pointcut.matches(method)) {
+            return methodProxy.invokeSuper(target, args);
+        }
 
         Object result = null;
 
