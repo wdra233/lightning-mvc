@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
@@ -18,18 +17,23 @@ import java.lang.reflect.Method;
 @Data
 public class ProxyAdvisor {
 
+
     private Advice advice;
 
     private ProxyPointcut pointcut;
 
-    public Object doProxy(Object target, Class<?> targetClass, Method method, Object[] args, MethodProxy methodProxy)
+    /**
+     * Execution order
+     */
+    private int order;
+
+    public Object doProxy(AdviceChain adviceChain)
             throws Throwable {
 
-        if (!pointcut.matches(method)) {
-            return methodProxy.invokeSuper(target, args);
-        }
-
         Object result = null;
+        Class<?> targetClass = adviceChain.getTargetClass();
+        Method method = adviceChain.getMethod();
+        Object[] args = adviceChain.getArgs();
 
         try {
             if (advice instanceof MethodBeforeAdvice) {
@@ -37,7 +41,7 @@ public class ProxyAdvisor {
             }
 
             // Attention: use $invokeSuper, target is the enhanced(original) object to get invoked
-            result = methodProxy.invokeSuper(target, args);
+            result = adviceChain.doAdviceChain();
 
             if (advice instanceof AfterReturningAdvice) {
                 ((AfterReturningAdvice) advice).afterReturning(targetClass, method, args);
@@ -49,8 +53,7 @@ public class ProxyAdvisor {
                 throw new Throwable(e);
             }
         }
-
         return result;
-
     }
+
 }

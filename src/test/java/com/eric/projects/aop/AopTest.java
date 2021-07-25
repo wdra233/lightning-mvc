@@ -18,6 +18,6 @@ public class AopTest {
         new Ioc().doIoc();
         LightningController controller = (LightningController) beanContainer.getBean(LightningController.class);
         controller.hello();
-        controller.helloForAspect();
+//        controller.helloForAspect();
     }
 }
