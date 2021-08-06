@@ -1,9 +1,9 @@
 package com.sample;
 
-import com.eric.projects.YW;
+import com.eric.projects.Lightning;
 
 public class App {
     public static void main(String[] args) {
-        YW.run(App.class);
+        Lightning.run(App.class);
     }
 }

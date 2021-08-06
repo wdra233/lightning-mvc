@@ -1,7 +1,7 @@
 package com.eric.projects.mvc;
 
 import com.alibaba.fastjson.JSON;
-import com.eric.projects.YW;
+import com.eric.projects.Lightning;
 import com.eric.projects.core.BeanContainer;
 import com.eric.projects.mvc.annotation.ResponseBody;
 import com.eric.projects.mvc.bean.ModelAndView;
@@ -125,7 +125,7 @@ public class ResultRender {
             }
 
             try {
-                req.getRequestDispatcher(YW.getConfiguration().getResourcePath() + path).forward(req, resp);
+                req.getRequestDispatcher(Lightning.getConfiguration().getResourcePath() + path).forward(req, resp);
             } catch (ServletException | IOException e) {
                 log.error("Forward request failed");
                 // TODO: Extract request params for Body, Path, Header

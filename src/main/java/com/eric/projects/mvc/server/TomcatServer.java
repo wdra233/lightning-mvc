@@ -1,16 +1,13 @@
 package com.eric.projects.mvc.server;
 
 import com.eric.projects.Configuration;
-import com.eric.projects.YW;
-import com.eric.projects.mvc.DispatchServlet;
+import com.eric.projects.Lightning;
+import com.eric.projects.mvc.DispatcherServlet;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
 import org.apache.catalina.core.StandardContext;
-import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.StandardRoot;
-import org.apache.jasper.servlet.JspServlet;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -22,7 +19,7 @@ public class TomcatServer implements Server {
     private Tomcat tomcat;
 
     public TomcatServer() {
-        this(YW.getConfiguration());
+        this(Lightning.getConfiguration());
     }
 
     public TomcatServer(Configuration configuration) {
@@ -44,13 +41,7 @@ public class TomcatServer implements Server {
             WebResourceRoot resources = new StandardRoot(ctx);
             ctx.setResources(resources);
 
-            // Adding jspServlet，defaultServlet, and dispatcherServlet
-            // Configure tomcat server
-            tomcat.addServlet("", "jspServlet", new JspServlet()).setLoadOnStartup(3);
-            tomcat.addServlet("", "defaultServlet", new DefaultServlet()).setLoadOnStartup(1);
-            tomcat.addServlet("", "dispatcherServlet", new DispatchServlet()).setLoadOnStartup(0);
-            ctx.addServletMappingDecoded("/templates/" + "*", "jspServlet");
-            ctx.addServletMappingDecoded("/static/" + "*", "defaultServlet");
+            tomcat.addServlet(configuration.getContextPath(), "dispatcherServlet", new DispatcherServlet()).setLoadOnStartup(0);
             ctx.addServletMappingDecoded("/*", "dispatcherServlet");
 
         } catch (Exception e) {

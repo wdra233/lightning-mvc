@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public final class YW {
+public final class Lightning {
 
     /**
      * Global configuration
@@ -33,12 +33,12 @@ public final class YW {
 
 
     public static void run(Configuration configuration) {
-        new YW().start(configuration);
+        new Lightning().start(configuration);
     }
 
     private void start(Configuration configuration) {
         try {
-            YW.configuration = configuration;
+            Lightning.configuration = configuration;
             String basePackage = configuration.getBootClass().getPackage().getName();
             BeanContainer.getInstance().loadBeans(basePackage);
 
